@@ -166,4 +166,23 @@ class CakeFabricateTest extends TestCase {
         $this->assertEquals(['Title1','Title2','Title3'], array_map(function($post) { return $post->title; }, $user->posts));
     }
 
+    /**
+     * Want to create sequential data from Same Model.
+     */
+    public function testCreateSameModelDataInACase() {
+        Fabricate::create('Users', function($data, $world) {
+            return [
+                'username' => 'taro',
+            ];
+        });
+        Fabricate::create('Users', function($data, $world) {
+            return [
+                'username' => 'taro2',
+            ];
+        });
+
+        $expected = 2;
+        $actual = TableRegistry::get('Users')->find('all')->count();
+        $this->assertSame($expected, $actual);
+    }
 }
